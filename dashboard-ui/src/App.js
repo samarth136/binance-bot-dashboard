@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const BASE_URL = "https://binance-bot-dashboard.onrender.com";
+
 function App() {
   const [price, setPrice] = useState(null);
   const [strategy, setStrategy] = useState("");
@@ -8,19 +10,23 @@ function App() {
   const [newStrategy, setNewStrategy] = useState("");
 
   const fetchStatus = async () => {
-    const res = await axios.get("http://localhost:5000/status?symbol=SOLUSDT");
-    setPrice(res.data.price);
-    setStrategy(res.data.strategy);
-    setAuto(res.data.auto_trading);
+    try {
+      const res = await axios.get(`${BASE_URL}/status?symbol=SOLUSDT`);
+      setPrice(res.data.price);
+      setStrategy(res.data.strategy);
+      setAuto(res.data.auto_trading);
+    } catch (err) {
+      console.error("Error fetching status:", err);
+    }
   };
 
   const toggleAuto = async () => {
-    await axios.post("http://localhost:5000/toggle_auto");
+    await axios.post(`${BASE_URL}/toggle_auto`);
     fetchStatus();
   };
 
   const updateStrategy = async () => {
-    await axios.post("http://localhost:5000/set_strategy", {
+    await axios.post(`${BASE_URL}/set_strategy`, {
       strategy: newStrategy
     });
     fetchStatus();
