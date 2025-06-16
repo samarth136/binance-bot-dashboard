@@ -1,0 +1,12 @@
+# render.yaml (added to existing project for deployment)
+services:
+  - type: web
+    name: binance-dashboard
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      - key: API_KEY
+        value: your_binance_api_key
+      - key: API_SECRET
+        value: your_binance_secret
