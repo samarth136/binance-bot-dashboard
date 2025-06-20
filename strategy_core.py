@@ -1,22 +1,25 @@
-# strategy_core.py
-
-from auto_trading import auto_trading_loop
-
 def auto_trade_strategy():
-    print("[STRATEGY] Auto-Trading Strategy Activated")
-    auto_trading_loop()
+    print("[AUTO STRATEGY] Executing Auto Trading Strategy...")
+    # Add logic for market condition evaluation and switching
+    # Placeholder: Simulate decision-making
+    decision = "trend"  # example fallback
+    if decision == "trend":
+        trend_following_strategy()
+    elif decision == "scalping":
+        scalping_strategy()
+    elif decision == "grid":
+        grid_trading_strategy()
+    else:
+        print("[AUTO STRATEGY] No valid decision made.")
 
 def scalping_strategy():
-    print("[STRATEGY] Scalping Strategy Activated")
-    # Example placeholder
-    print("Executing scalping trades...")
+    print("[SCALPING STRATEGY] Executing Scalping Strategy...")
+    # Add scalping logic here
 
 def trend_following_strategy():
-    print("[STRATEGY] Trend Following Strategy Activated")
-    # Example placeholder
-    print("Executing trend-following logic...")
+    print("[TREND STRATEGY] Executing Trend Following Strategy...")
+    # Add trend logic here
 
 def grid_trading_strategy():
-    print("[STRATEGY] Grid Trading Strategy Activated")
-    # Example placeholder
-    print("Executing grid trading logic...")
+    print("[GRID STRATEGY] Executing Grid Trading Strategy...")
+    # Add grid trading logic here
