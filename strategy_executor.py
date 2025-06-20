@@ -1,26 +1,13 @@
-from strategies import (
-    auto_trade_strategy,
-    scalping_strategy,
-    trend_following_strategy,
-    grid_trading_strategy
-)
+from strategies import auto_trade_strategy, scalping_strategy, trend_following_strategy, grid_trading_strategy
 
 def execute_selected_strategy(strategy_name):
-    """
-    Executes the trading strategy based on the provided name.
-    
-    Parameters:
-    - strategy_name (str): One of ['auto', 'scalping', 'trend', 'grid'].
-    """
-    print(f"[BOT] Selected Strategy: {strategy_name}")
-
-    if strategy_name == "auto":
+    if strategy_name == 'auto':
         auto_trade_strategy()
-    elif strategy_name == "scalping":
+    elif strategy_name == 'scalping':
         scalping_strategy()
-    elif strategy_name == "trend":
+    elif strategy_name == 'trend':
         trend_following_strategy()
-    elif strategy_name == "grid":
+    elif strategy_name == 'grid':
         grid_trading_strategy()
     else:
         print(f"[ERROR] Unknown strategy: {strategy_name}")
