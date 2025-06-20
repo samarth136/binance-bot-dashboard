@@ -1,20 +1,17 @@
-# strategy_executor.py
-from binance_client import place_market_order
+from strategies import auto_trade_strategy, scalping_strategy, trend_following_strategy
+from binance_client import get_auto_trading_status, get_selected_strategy
 
+def execute_selected_strategy():
+    auto_mode = get_auto_trading_status()
+    selected_strategy = get_selected_strategy()
 
-def ai_scalping():
-    print("Executing AI Scalping Strategy.")
-    # Example trade - Buy 0.2 SOL
-    place_market_order("SOLUSDT", "BUY", 0.2)
+    print(f"[STRATEGY] Auto mode: {auto_mode} | Selected: {selected_strategy}")
 
-
-def trend_following():
-    print("Executing Trend Following Strategy.")
-    # Example trade - Sell 0.2 SOL
-    place_market_order("SOLUSDT", "SELL", 0.2)
-
-
-def grid_trading():
-    print("Executing Grid Trading Strategy.")
-    # Example grid trade - Buy 0.1 SOL
-    place_market_order("SOLUSDT", "BUY", 0.1)
+    if auto_mode:
+        auto_trade_strategy()
+    elif selected_strategy == 'scalping':
+        scalping_strategy()
+    elif selected_strategy == 'trend':
+        trend_following_strategy()
+    else:
+        print(f"[STRATEGY] Unknown strategy: {selected_strategy}")
