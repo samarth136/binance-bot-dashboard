@@ -1,20 +1,22 @@
-from flask import Flask, jsonify, request, send_from_directory
-import os
+# app.py
+from flask import Flask, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
-def serve_dashboard():
-    return send_from_directory('static', 'index.html')
-
-@app.route('/<path:path>')
-def static_proxy(path):
-    return send_from_directory('static', path)
-
-@app.route('/api/health')
-def health():
-    return jsonify({"status": "ok"})
+def home():
+    return jsonify({"message": "Binance bot dashboard is running."})
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    from threading import Thread
+    import os
+    import time
+
+    def run_bot():
+        time.sleep(5)  # small delay to allow the Flask app to start
+        os.system("python bot_runner.py")
+
+    Thread(target=run_bot).start()
+    app.run(host='0.0.0.0', port=5000, debug=True)

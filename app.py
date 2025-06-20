@@ -1,5 +1,6 @@
-from flask import Flask, jsonify, request, send_from_directory
-import os
+from flask import Flask, jsonify, send_from_directory
+import threading
+from bot_runner import run_bot  # ⬅️ Make sure bot_runner.py is in the same directory
 
 app = Flask(__name__, static_folder='static')
 
@@ -7,14 +8,17 @@ app = Flask(__name__, static_folder='static')
 def index():
     return send_from_directory(app.static_folder, 'index.html')
 
-@app.route('/<path:path>')
-def serve_static(path):
-    return send_from_directory(app.static_folder, path)
+@app.route('/status')
+def status():
+    return jsonify({"status": "Bot is running"})
 
-@app.route('/api/health')
-def health():
-    return jsonify({"status": "ok"})
+# Start the trading bot in a background thread when Flask starts
+def start_bot():
+    run_bot()
+
+bot_thread = threading.Thread(target=start_bot)
+bot_thread.daemon = True
+bot_thread.start()
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host='0.0.0.0', port=10000, debug=True)

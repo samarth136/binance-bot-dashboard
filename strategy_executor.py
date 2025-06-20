@@ -1,36 +1,20 @@
-import time
-from binance_client import (
-    get_auto_trading_status,
-    get_current_strategy,
-    get_current_capital
-)
+# strategy_executor.py
+from binance_client import place_market_order
+
 
 def ai_scalping():
-    print("Executing AI Scalping Strategy...")
+    print("Executing AI Scalping Strategy.")
+    # Example trade - Buy 0.2 SOL
+    place_market_order("SOLUSDT", "BUY", 0.2)
+
 
 def trend_following():
-    print("Executing Trend Following Strategy...")
+    print("Executing Trend Following Strategy.")
+    # Example trade - Sell 0.2 SOL
+    place_market_order("SOLUSDT", "SELL", 0.2)
+
 
 def grid_trading():
-    print("Executing Grid Trading Strategy...")
-
-def execute_strategy():
-    strategy = get_current_strategy()
-    if strategy == "ai_scalping":
-        ai_scalping()
-    elif strategy == "trend_following":
-        trend_following()
-    elif strategy == "grid_trading":
-        grid_trading()
-    else:
-        print(f"Unknown strategy: {strategy}")
-
-if __name__ == '__main__':
-    print("Strategy executor started...")
-    while True:
-        if get_auto_trading_status():
-            print(f"\n[Auto Mode ON] Using strategy: {get_current_strategy()}")
-            execute_strategy()
-        else:
-            print("\n[Auto Mode OFF] Waiting...")
-        time.sleep(10)  # You can adjust this interval as needed
+    print("Executing Grid Trading Strategy.")
+    # Example grid trade - Buy 0.1 SOL
+    place_market_order("SOLUSDT", "BUY", 0.1)
