@@ -1,2 +1,4 @@
 flask
 python-binance
+python-dotenv
+"python-dotenv" 
