@@ -1,17 +1,21 @@
-from strategies import auto_trade_strategy, scalping_strategy, trend_following_strategy
-from binance_client import get_auto_trading_status, get_selected_strategy
+# strategies.py
 
-def execute_selected_strategy():
-    auto_mode = get_auto_trading_status()
-    selected_strategy = get_selected_strategy()
+def auto_trade_strategy():
+    print("[AUTO] Running Auto Trading Strategy")
+    # TODO: Add auto strategy logic here
+    pass
 
-    print(f"[STRATEGY] Auto mode: {auto_mode} | Selected: {selected_strategy}")
+def scalping_strategy():
+    print("[SCALPING] Running Scalping Strategy")
+    # TODO: Add scalping strategy logic here
+    pass
 
-    if auto_mode:
-        auto_trade_strategy()
-    elif selected_strategy == 'scalping':
-        scalping_strategy()
-    elif selected_strategy == 'trend':
-        trend_following_strategy()
-    else:
-        print(f"[STRATEGY] Unknown strategy: {selected_strategy}")
+def trend_following_strategy():
+    print("[TREND] Running Trend Following Strategy")
+    # TODO: Add trend-following logic here
+    pass
+
+def grid_trading_strategy():
+    print("[GRID] Running Grid Trading Strategy")
+    # TODO: Add grid strategy logic here
+    pass
