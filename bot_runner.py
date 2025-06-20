@@ -1,19 +1,13 @@
-from strategy_executor import execute_selected_strategy
-import threading
+# bot_runner.py
+
 import time
+from strategy_executor import execute_selected_strategy
 
 def run_bot():
-    print("[BOT] Auto-trading thread starting...")
+    print("[BOT] Starting trading bot...")
 
-    def bot_loop():
-        while True:
-            try:
-                execute_selected_strategy()
-                time.sleep(60)  # wait 1 minute between executions (adjust as needed)
-            except Exception as e:
-                print(f"[BOT] Error during bot execution: {e}")
-                time.sleep(60)
-
-    thread = threading.Thread(target=bot_loop)
-    thread.daemon = True
-    thread.start()
+    strategy_name = "auto"  # default strategy for now
+    while True:
+        print("[BOT] Running strategy execution loop...")
+        execute_selected_strategy(strategy_name)
+        time.sleep(60)  # run once per minute

@@ -1,22 +1,22 @@
-def auto_trade_strategy():
-    print("[AUTO] Running Auto Trading Strategy")
-    # TODO: Add your intelligent strategy switching logic here
-    pass
+# strategy_executor.py
 
+from strategies import (
+    auto_trade_strategy,
+    scalping_strategy,
+    trend_following_strategy,
+    grid_trading_strategy
+)
 
-def scalping_strategy():
-    print("[SCALPING] Running Scalping Strategy")
-    # TODO: Implement fast in-and-out trade logic
-    pass
-
-
-def trend_following_strategy():
-    print("[TREND] Running Trend Following Strategy")
-    # TODO: Implement trend-following logic using moving averages, RSI, etc.
-    pass
-
-
-def grid_trading_strategy():
-    print("[GRID] Running Grid Trading Strategy")
-    # TODO: Implement grid strategy logic for range-bound markets
-    pass
+def execute_selected_strategy(strategy_name):
+    print(f"[STRATEGY EXECUTOR] Selected Strategy: {strategy_name}")
+    
+    if strategy_name == "auto":
+        auto_trade_strategy()
+    elif strategy_name == "scalping":
+        scalping_strategy()
+    elif strategy_name == "trend":
+        trend_following_strategy()
+    elif strategy_name == "grid":
+        grid_trading_strategy()
+    else:
+        print(f"[ERROR] Unknown strategy: {strategy_name}")
