@@ -1,4 +1,4 @@
-from strat import (
+from strategy_core import (
     auto_trade_strategy,
     scalping_strategy,
     trend_following_strategy,
@@ -7,7 +7,7 @@ from strat import (
 
 def execute_selected_strategy(strategy_name):
     print(f"[STRATEGY EXECUTOR] Selected Strategy: {strategy_name}")
-    
+
     if strategy_name == "auto":
         auto_trade_strategy()
     elif strategy_name == "scalping":
