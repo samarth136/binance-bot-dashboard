@@ -1,60 +1,40 @@
+import os
+from dotenv import load_dotenv
 from binance.client import Client
 from binance.enums import *
-from dotenv import load_dotenv
-import os
 
-# Load environment variables
-load_dotenv()
-
-# Initialize Binance Client
-client = Client(
-    api_key=os.getenv("BINANCE_API_KEY"),
-    api_secret=os.getenv("BINANCE_API_SECRET")
-)
-
-# Globals for storing bot state
-strategy_mode = "auto"  # default strategy mode
-current_strategy = "grid"  # initial fallback strategy
-auto_trading_enabled = True  # Auto-trading toggle
-
-# Get latest price for a given symbol
-def get_latest_price(symbol="SOLUSDT"):
-    ticker = client.get_symbol_ticker(symbol=symbol)
-    return float(ticker['price'])
-
-# --- Auto-Trading Status ---
-def get_auto_trading_status():
-    return auto_trading_enabled
-
-def set_auto_trading_status(status: bool):
-    global auto_trading_enabled
-    auto_trading_enabled = status
-
-# --- Strategy Get/Set ---
-def get_strategy():
-    return current_strategy
-
-def set_strategy(strategy_name):
-    global current_strategy
-    current_strategy = strategy_name
-
-# --- Strategy Execution Logic ---
-from strat import (
+from strategy_core import (
     auto_trade_strategy,
     scalping_strategy,
     trend_following_strategy,
     grid_trading_strategy
 )
 
-def execute_strategy(name):
-    print(f"[STRATEGY] Executing: {name}")
-    if name == "auto":
+load_dotenv()
+
+API_KEY = os.getenv("BINANCE_API_KEY")
+API_SECRET = os.getenv("BINANCE_API_SECRET")
+
+client = Client(API_KEY, API_SECRET)
+
+def get_price(symbol):
+    return float(client.get_symbol_ticker(symbol=symbol)["price"])
+
+def get_balance(asset):
+    balance_info = client.get_asset_balance(asset=asset)
+    return float(balance_info["free"]) if balance_info else 0.0
+
+def get_auto_trading_status():
+    return os.getenv("AUTO_TRADING", "off") == "on"
+
+def run_strategy(strategy_name):
+    if strategy_name == "auto":
         auto_trade_strategy()
-    elif name == "scalping":
+    elif strategy_name == "scalping":
         scalping_strategy()
-    elif name == "trend-following":
+    elif strategy_name == "trend":
         trend_following_strategy()
-    elif name == "grid":
+    elif strategy_name == "grid":
         grid_trading_strategy()
     else:
-        print(f"[ERROR] Unknown strategy name: {name}")
+        print(f"[ERROR] Unknown strategy: {strategy_name}")

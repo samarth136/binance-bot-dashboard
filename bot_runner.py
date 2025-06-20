@@ -1,13 +1,7 @@
-# bot_runner.py
-
-import time
 from strategy_executor import execute_selected_strategy
 
 def run_bot():
-    print("[BOT] Starting trading bot...")
-
-    strategy_name = "auto"  # default strategy for now
-    while True:
-        print("[BOT] Running strategy execution loop...")
-        execute_selected_strategy(strategy_name)
-        time.sleep(60)  # runs every minute
+    print("[BOT RUNNER] Starting the trading bot...")
+    # You can set your default or selected strategy here
+    selected_strategy = "auto"  # Replace with dynamic choice if needed
+    execute_selected_strategy(selected_strategy)
