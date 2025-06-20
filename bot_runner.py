@@ -10,4 +10,4 @@ def run_bot():
     while True:
         print("[BOT] Running strategy execution loop...")
         execute_selected_strategy(strategy_name)
-        time.sleep(60)  # run once per minute
+        time.sleep(60)  # runs every minute

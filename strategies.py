@@ -1,21 +1,22 @@
 # strategies.py
 
+from auto_trading import auto_trading_loop
+
 def auto_trade_strategy():
     print("[AUTO] Running Auto Trading Strategy")
-    # TODO: Add auto strategy logic here
-    pass
+    auto_trading_loop()
 
 def scalping_strategy():
     print("[SCALPING] Running Scalping Strategy")
-    # TODO: Add scalping strategy logic here
+    # TODO: Implement scalping logic
     pass
 
 def trend_following_strategy():
     print("[TREND] Running Trend Following Strategy")
-    # TODO: Add trend-following logic here
+    # TODO: Implement trend-following logic
     pass
 
 def grid_trading_strategy():
     print("[GRID] Running Grid Trading Strategy")
-    # TODO: Add grid strategy logic here
+    # TODO: Implement grid trading logic
     pass
