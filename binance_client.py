@@ -1,60 +1,60 @@
-# binance_client.py
-
 from binance.client import Client
-from config import API_KEY, API_SECRET
+from binance.enums import *
+from dotenv import load_dotenv
+import os
 
-# Initialize Binance client
-client = Client(API_KEY, API_SECRET)
+# Load environment variables
+load_dotenv()
 
-# Mock strategy state (should ideally be stored in a persistent database)
-current_strategy = "auto"
-auto_trading_enabled = True
+# Initialize Binance Client
+client = Client(
+    api_key=os.getenv("BINANCE_API_KEY"),
+    api_secret=os.getenv("BINANCE_API_SECRET")
+)
 
-# --- Price Fetching ---
-def get_latest_price(symbol):
-    try:
-        ticker = client.get_symbol_ticker(symbol=symbol)
-        return float(ticker["price"])
-    except Exception as e:
-        print(f"[ERROR] get_latest_price: {e}")
-        return None
+# Globals for storing bot state
+strategy_mode = "auto"  # default strategy mode
+current_strategy = "grid"  # initial fallback strategy
+auto_trading_enabled = True  # Auto-trading toggle
+
+# Get latest price for a given symbol
+def get_latest_price(symbol="SOLUSDT"):
+    ticker = client.get_symbol_ticker(symbol=symbol)
+    return float(ticker['price'])
 
 # --- Auto-Trading Status ---
 def get_auto_trading_status():
-    global auto_trading_enabled
     return auto_trading_enabled
 
-def toggle_auto_trading():
+def set_auto_trading_status(status: bool):
     global auto_trading_enabled
-    auto_trading_enabled = not auto_trading_enabled
-    return auto_trading_enabled
+    auto_trading_enabled = status
 
-# --- Strategy Storage ---
+# --- Strategy Get/Set ---
 def get_strategy():
-    global current_strategy
     return current_strategy
 
-def set_strategy(name):
+def set_strategy(strategy_name):
     global current_strategy
-    current_strategy = name
+    current_strategy = strategy_name
 
-# --- Strategy Execution Dispatcher ---
-from strategies import (
+# --- Strategy Execution Logic ---
+from strat import (
     auto_trade_strategy,
     scalping_strategy,
     trend_following_strategy,
     grid_trading_strategy
 )
 
-def execute_strategy(strategy_name):
-    print(f"[BINANCE_CLIENT] Executing strategy: {strategy_name}")
-    if strategy_name == "auto":
+def execute_strategy(name):
+    print(f"[STRATEGY] Executing: {name}")
+    if name == "auto":
         auto_trade_strategy()
-    elif strategy_name == "scalping":
+    elif name == "scalping":
         scalping_strategy()
-    elif strategy_name == "trend":
+    elif name == "trend-following":
         trend_following_strategy()
-    elif strategy_name == "grid":
+    elif name == "grid":
         grid_trading_strategy()
     else:
-        print(f"[ERROR] Unknown strategy: {strategy_name}")
+        print(f"[ERROR] Unknown strategy name: {name}")
