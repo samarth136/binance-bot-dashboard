@@ -1,7 +1,24 @@
-from strategy_executor import execute_selected_strategy
+import time
+import logging
+import sys
+from strategy_core import execute_active_strategy
 
-def run_bot():
-    print("[BOT RUNNER] Starting the trading bot...")
-    # You can set your default or selected strategy here
-    selected_strategy = "auto"  # Replace with dynamic choice if needed
-    execute_selected_strategy(selected_strategy)
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
+
+LOOP_INTERVAL = 10  # seconds
+
+def main():
+    logging.info("🚀 Trading bot loop started")
+    while True:
+        try:
+            execute_active_strategy()
+        except Exception as e:
+            logging.error(f"❌ Error: {e}")
+        time.sleep(LOOP_INTERVAL)
+
+if __name__ == "__main__":
+    main()

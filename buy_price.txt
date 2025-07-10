@@ -1,0 +1,4 @@
+touch buy_price_SOLUSDT.txt
+touch buy_price_ARBUSDT.txt
+touch buy_price_INJUSDT.txt
+touch buy_price_SEIUSDT.txt

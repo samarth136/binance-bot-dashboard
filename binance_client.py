@@ -1,40 +1,57 @@
-import os
-from dotenv import load_dotenv
 from binance.client import Client
-from binance.enums import *
+from binance.helpers import round_step_size
+from binance.exceptions import BinanceAPIException
+import logging
+import config
 
-from strategy_core import (
-    auto_trade_strategy,
-    scalping_strategy,
-    trend_following_strategy,
-    grid_trading_strategy
-)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("binance_client")
 
-load_dotenv()
+client = Client(config.API_KEY, config.API_SECRET)
 
-API_KEY = os.getenv("BINANCE_API_KEY")
-API_SECRET = os.getenv("BINANCE_API_SECRET")
-
-client = Client(API_KEY, API_SECRET)
-
-def get_price(symbol):
-    return float(client.get_symbol_ticker(symbol=symbol)["price"])
+def get_current_price(symbol):
+    ticker = client.get_symbol_ticker(symbol=symbol)
+    return float(ticker['price'])
 
 def get_balance(asset):
-    balance_info = client.get_asset_balance(asset=asset)
-    return float(balance_info["free"]) if balance_info else 0.0
+    try:
+        balance = client.get_asset_balance(asset=asset)
+        return float(balance['free']) if balance else 0.0
+    except Exception as e:
+        logger.error(f"❌ Error fetching balance for {asset}: {e}")
+        return 0.0
 
-def get_auto_trading_status():
-    return os.getenv("AUTO_TRADING", "off") == "on"
+def place_market_order(side, quantity, symbol):
+    try:
+        order = client.create_order(
+            symbol=symbol,
+            side=side,
+            type=Client.ORDER_TYPE_MARKET,
+            quantity=quantity
+        )
+        logger.info(f"✅ Order placed: {side} {quantity} {symbol}")
+        return order
+    except Exception as e:
+        logger.error(f"❌ Order failed for {symbol}: {e}")
+        return None
 
-def run_strategy(strategy_name):
-    if strategy_name == "auto":
-        auto_trade_strategy()
-    elif strategy_name == "scalping":
-        scalping_strategy()
-    elif strategy_name == "trend":
-        trend_following_strategy()
-    elif strategy_name == "grid":
-        grid_trading_strategy()
-    else:
-        print(f"[ERROR] Unknown strategy: {strategy_name}")
+def get_lot_size(symbol):
+    try:
+        exchange_info = client.get_symbol_info(symbol)
+        for f in exchange_info['filters']:
+            if f['filterType'] == 'LOT_SIZE':
+                return float(f['stepSize'])
+    except BinanceAPIException as e:
+        logger.error(f"❌ Couldn't fetch lot size for {symbol}: {e}")
+    return 0.001  # default fallback
+
+def calculate_trade_quantity(usdt_balance, current_price, symbol):
+    raw_qty = usdt_balance / current_price
+    step_size = get_lot_size(symbol)
+    return round_step_size(raw_qty, step_size)
+
+def should_buy(current_price, threshold):
+    return current_price <= threshold
+def should_sell(buy_price, current_price, margin_percent=2.5):
+    target_price = buy_price * (1 + margin_percent / 100)
+    return current_price >= target_price, f"Target: {current_price:.6f} >= {target_price:.6f}"
